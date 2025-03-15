@@ -20,7 +20,8 @@ class Ativo(Base):
     data_insercao = Column(DateTime, default=datetime.now())
 
     def __init__(self, simbolo: str, nome: str, preco_medio: float,
-                 quantidade: int, cotacao: float, valor_total: float,
+                 quantidade: int, cotacao: Union[Float, None] = None,
+                 valor_total: Union[Float, None] = None,
                  data_cotacao: Union[DateTime, None] = None,
                  data_insercao: Union[DateTime, None] = None):
         """
