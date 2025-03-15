@@ -35,7 +35,7 @@ def add_ativo(form: AtivoSchema):
     Retorna um representação das ativos
     """
     ativo = Ativo(
-        simbolo=form.simbolo
+        simbolo=form.simbolo,
         nome=form.nome,
         preco_medio=form.preco_medio,
         quantidade=form.quantidade

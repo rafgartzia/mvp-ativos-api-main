@@ -1,4 +1,4 @@
-from schemas.progressao import ProgressaoSchema, ProgressaoBuscaSchema, ProgressaoViewSchema, \
-                               ListagemProgressoesSchema, ProgressaoDelSchema, apresenta_progressoes, \
-                               apresenta_progressao
+from schemas.ativo import AtivoSchema, AtivoBuscaSchema, AtivoViewSchema, \
+    ListagemAtivosSchema, AtivoDelSchema, apresenta_ativos, \
+    apresenta_ativo
 from schemas.error import ErrorSchema
