@@ -10,9 +10,9 @@ class AtivoSchema(BaseModel):
     nome: str = "Petrobras PN"
     preco_medio: float = 50.00
     quantidade: int = 100
-    cotacao: float = 55.00
-    valor_total: float = 5500.00
-    data_cotacao: str = "2025-01-01 00:00:00.000"
+    # cotacao: float = 55.00
+    # valor_total: float = 5500.00
+    # data_cotacao: str = "2025-01-01 00:00:00.000"
 
 
 class AtivoBuscaSchema(BaseModel):
