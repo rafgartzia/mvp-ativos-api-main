@@ -17,7 +17,9 @@ CORS(app)
 home_tag = Tag(name="Documentação",
                description="Seleção de documentação: Swagger, Redoc ou RapiDoc")
 ativo_tag = Tag(name="Ativo",
-                     description="Adição, visualização e remoção de ativos à base")
+                description="Adição, visualização e remoção de ativos à base")
+cotacao_tag = Tag(name="Cotação",
+                  description="Busca a última cotação de um ativo")
 
 
 @app.get('/', tags=[home_tag])
@@ -144,3 +146,35 @@ def del_ativo(query: AtivoBuscaSchema):
         logger.warning(f"Erro ao deletar ativo #'{
                        ativo_simbolo}', {error_msg}")
         return {"mesage": error_msg}, 404
+
+
+@app.get('/cotacao', tags=[cotacao_tag],
+         responses={"200": CotacaoViewSchema, "404": ErrorSchema})
+def get_cotacao(query: CotacaoBuscaSchema):
+    """Retorna a cotação de um ativo.
+    """
+    urlBase = "https://brapi.dev/api/quote/"
+
+    token = query.token
+    ativo = query.ativo
+
+    url = urlBase + ativo + "?range=1d&token=" + token
+
+    response = requests.get(url)
+    respJson = response.json()['results'][0]
+
+    if response.status_code == 200:
+        cotacao = {
+            "ativo": respJson['symbol'],
+            "valor": respJson['regularMarketPrice'],
+            "datahora": respJson['regularMarketTime']
+        }
+
+        logger.debug(f"Cotacao encontrada")
+        return cotacao, 200
+
+    else:
+        error_msg = "Cotacao não encontrado"
+        print(response.text)
+        logger.warning(f"ERRO - Cotacao não encontrada")
+        return {"message": error_msg}, 404
