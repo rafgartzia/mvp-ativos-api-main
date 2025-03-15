@@ -15,7 +15,7 @@ class Ativo(Base):
     preco_medio = Column(Float, nullable=False)
     quantidade = Column(Integer, nullable=False)
     cotacao = Column(Float, nullable=True)
-    valor_total = Column(Float, nullable=False)
+    valor_total = Column(Float, nullable=True)
     data_cotacao = Column(DateTime, nullable=True)
     data_insercao = Column(DateTime, default=datetime.now())
 
