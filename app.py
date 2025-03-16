@@ -43,8 +43,7 @@ def add_ativo(form: AtivoSchema):
         preco_medio=form.preco_medio,
         quantidade=form.quantidade
     )
-    logger.debug(f"Adicionando ativo: '{
-                 ativo.simbolo}' - '{ativo.nome}'")
+    logger.debug(f"Adicionando ativo: {ativo.simbolo} - {ativo.nome}")
     try:
         # criando conexão com a base
         session = Session()
@@ -52,22 +51,21 @@ def add_ativo(form: AtivoSchema):
         session.add(ativo)
         # efetivando o camando de adição de novo item na tabela
         session.commit()
-        logger.debug(f"Adicionada ativo: '{
-                     ativo.simbolo}' - '{ativo.nome}'")
+        logger.debug(f"Adicionada ativo: {ativo.simbolo} - {ativo.nome}")
         return apresenta_ativo(ativo), 200
 
     except IntegrityError as e:
         # como a duplicidade do nome é a provável razão do IntegrityError
         error_msg = "Ativo já existente na base :/"
-        logger.warning(f"Erro ao adicionar ativo '{ativo.simbolo}' - '{
-                       ativo.nome}', {error_msg}")
+        logger.warning(
+            f"Erro ao adicionar ativo {ativo.simbolo} - {ativo.nome}, {error_msg}")
         return {"message": error_msg}, 409
 
     except Exception as e:
         # caso um erro fora do previsto
         error_msg = "Não foi possível salvar novo item :/"
-        logger.warning(f"Erro ao adicionar ativo '{ativo.simbolo}' - '{
-                       ativo.nome}', {error_msg}")
+        logger.warning(
+            f"Erro ao adicionar ativo {ativo.simbolo} - {ativo.nome}, {error_msg}")
         return {"message": error_msg}, 400
 
 
@@ -111,11 +109,10 @@ def get_ativo(query: AtivoBuscaSchema):
     if not ativo:
         # se a ativo não foi encontrada
         error_msg = "Ativo não encontrado na base :/"
-        logger.warning(f"Erro ao buscar ativo '{
-                       ativo_simbolo}', {error_msg}")
+        logger.warning(f"Erro ao buscar ativo {ativo_simbolo}, {error_msg}")
         return {"message": error_msg}, 404
     else:
-        logger.debug(f"Ativo encontrado: '{ativo_simbolo}'")
+        logger.debug(f"Ativo encontrado: {ativo_simbolo}")
         # retorna a representação da ativo
         return apresenta_ativo(ativo), 200
 
@@ -144,8 +141,8 @@ def del_ativo(query: AtivoBuscaSchema):
     else:
         # se a ativo não foi encontrada
         error_msg = "Ativo não encontrado na base :/"
-        logger.warning(f"Erro ao deletar ativo #'{
-                       ativo_simbolo}', {error_msg}")
+        logger.warning(
+            f"Erro ao deletar ativo {ativo_simbolo}, {error_msg}")
         return {"mesage": error_msg}, 404
 
 
@@ -184,8 +181,8 @@ def update_ativo(query: CotacaoBuscaSchema):
         if not ativo:
             # se a ativo não foi encontrado
             error_msg = "Ativo não encontrado na base :/"
-            logger.warning(f"Erro ao buscar ativo '{
-                ativo_simbolo}', {error_msg}")
+            logger.warning(
+                f"Erro ao buscar ativo {ativo_simbolo} , {error_msg}")
             return {"message": error_msg}, 404
 
         else:
