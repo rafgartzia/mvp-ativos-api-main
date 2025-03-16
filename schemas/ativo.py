@@ -10,9 +10,9 @@ class AtivoSchema(BaseModel):
     nome: str = "Petrobras PN"
     preco_medio: float = 50.00
     quantidade: int = 100
-    # cotacao: float = 55.00
-    # valor_total: float = 5500.00
-    # data_cotacao: str = "2025-01-01 00:00:00.000"
+    cotacao: float = 55.00
+    valor_total: float = 5500.00
+    data_cotacao: str = "2025-01-01 00:00:00.000"
 
 
 class AtivoBuscaSchema(BaseModel):
@@ -38,7 +38,9 @@ def apresenta_ativos(ativos: List[AtivoSchema]):
             "simbolo": ativo.simbolo,
             "nome": ativo.nome,
             "preco_medio": ativo.preco_medio,
-            "quantidade": ativo.quantidade
+            "quantidade": ativo.quantidade,
+            "cotacao": ativo.cotacao,
+            "data_cotacao": ativo.data_cotacao
         })
 
     return {"ativos": result}
@@ -72,7 +74,10 @@ def apresenta_ativo(ativo: Ativo):
         "simbolo": ativo.simbolo,
         "nome": ativo.nome,
         "preco_medio": ativo.preco_medio,
-        "quantidade": ativo.quantidade
+        "quantidade": ativo.quantidade,
+        "cotacao": ativo.cotacao,
+        "data_cotacao": ativo.data_cotacao
+
     }
 
 
@@ -81,13 +86,13 @@ class CotacaoBuscaSchema(BaseModel):
         feita apenas com base no codigo do ativo. O token da API externa deve
         ser informado.
     """
-    ativo: str = "PETR4"
+    simbolo: str = "PETR4"
     token: str = "token1234567890"
 
 
 class CotacaoViewSchema(BaseModel):
     """ Define como uma cotação será retornado.
     """
-    ativo: str = "PETR4"
+    simbolo: str = "PETR4"
     valor: float = 100.00
     data: str = "2021-01-01"

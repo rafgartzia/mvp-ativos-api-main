@@ -6,6 +6,7 @@ from model import Session, Ativo
 from logger import logger
 from schemas import *
 from flask_cors import CORS
+from datetime import datetime
 import requests
 
 
@@ -153,30 +154,67 @@ def del_ativo(query: AtivoBuscaSchema):
 def cotacao(query: CotacaoBuscaSchema):
     """Retorna a cotação de um ativo.
     """
-    ativo = query.ativo
+    simbolo = query.simbolo
     token = query.token
 
     logger.debug(f"Buscando cotação do ativo {ativo}")
-    cotacao, status = get_cotacao(ativo, token)
+    cotacao, status = get_cotacao(simbolo, token)
 
     return cotacao, status
 
 
-def get_cotacao(ativo, token):
+@app.patch('/atualizacotacao', tags=[cotacao_tag],
+           responses={"200": AtivoViewSchema, "404": ErrorSchema})
+def update_ativo(query: CotacaoBuscaSchema):
+    """
+    Atualiza a cotação de um ativo.
+    """
+    ativo = query.simbolo
+    token = query.token
+
+    cotacao, status = get_cotacao(ativo, token)
+
+    if status == 200:
+        # criando conexão com a base
+        session = Session()
+        # fazendo a busca
+        ativo = session.query(Ativo).filter(
+            Ativo.simbolo == ativo).first()
+
+        if not ativo:
+            # se a ativo não foi encontrado
+            error_msg = "Ativo não encontrado na base :/"
+            logger.warning(f"Erro ao buscar ativo '{
+                ativo_simbolo}', {error_msg}")
+            return {"message": error_msg}, 404
+
+        else:
+            ativo.cotacao = cotacao['valor']
+            ativo.data_cotacao = cotacao['datahora']
+            session.commit()
+            return apresenta_ativo(ativo), 200
+    else:
+        return cotacao, status
+
+
+def get_cotacao(simbolo, token):
 
     urlBase = "https://brapi.dev/api/quote/"
-
-    url = urlBase + ativo + "?range=1d&token=" + token
-
-    # inserir try/catch para tratar erro de ativo nao existente
+    url = urlBase + simbolo + "?range=1d&token=" + token
     response = requests.get(url)
 
     if response.status_code == 200:
+
         respJson = response.json()['results'][0]
+
+        data_hora_iso = respJson['regularMarketTime']
+        data_hora_python = datetime.strptime(
+            data_hora_iso, "%Y-%m-%dT%H:%M:%S.%fZ")
+
         cotacao = {
             "ativo": respJson['symbol'],
             "valor": respJson['regularMarketPrice'],
-            "datahora": respJson['regularMarketTime']
+            "datahora": data_hora_python
         }
 
         logger.debug(f"Cotacao encontrada {ativo}")
@@ -189,5 +227,5 @@ def get_cotacao(ativo, token):
             "datahora": None
         }
 
-        logger.warning(f"ERRO - Cotacao não encontrada")
+        logger.warning("ERRO - Cotacao não encontrada")
         return erro_cotacao, 404
