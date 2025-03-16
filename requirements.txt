@@ -8,3 +8,4 @@ pydantic
 SQLAlchemy
 SQLAlchemy-Utils
 typing_extensions
+requests

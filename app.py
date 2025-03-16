@@ -1,13 +1,13 @@
 from flask_openapi3 import OpenAPI, Info, Tag
 from flask import redirect
 from urllib.parse import unquote
-
 from sqlalchemy.exc import IntegrityError
-
 from model import Session, Ativo
 from logger import logger
 from schemas import *
 from flask_cors import CORS
+import requests
+
 
 info = Info(title="API Ativos", version="1.0.0")
 app = OpenAPI(__name__, info=info)
@@ -150,31 +150,44 @@ def del_ativo(query: AtivoBuscaSchema):
 
 @app.get('/cotacao', tags=[cotacao_tag],
          responses={"200": CotacaoViewSchema, "404": ErrorSchema})
-def get_cotacao(query: CotacaoBuscaSchema):
+def cotacao(query: CotacaoBuscaSchema):
     """Retorna a cotação de um ativo.
     """
-    urlBase = "https://brapi.dev/api/quote/"
-
-    token = query.token
     ativo = query.ativo
+    token = query.token
+
+    logger.debug(f"Buscando cotação do ativo {ativo}")
+    cotacao, status = get_cotacao(ativo, token)
+
+    return cotacao, status
+
+
+def get_cotacao(ativo, token):
+
+    urlBase = "https://brapi.dev/api/quote/"
 
     url = urlBase + ativo + "?range=1d&token=" + token
 
+    # inserir try/catch para tratar erro de ativo nao existente
     response = requests.get(url)
-    respJson = response.json()['results'][0]
 
     if response.status_code == 200:
+        respJson = response.json()['results'][0]
         cotacao = {
             "ativo": respJson['symbol'],
             "valor": respJson['regularMarketPrice'],
             "datahora": respJson['regularMarketTime']
         }
 
-        logger.debug(f"Cotacao encontrada")
+        logger.debug(f"Cotacao encontrada {ativo}")
         return cotacao, 200
 
     else:
-        error_msg = "Cotacao não encontrado"
-        print(response.text)
+        erro_cotacao = {
+            "ativo": "Ativo não encontrado ou token incorreto",
+            "valor": None,
+            "datahora": None
+        }
+
         logger.warning(f"ERRO - Cotacao não encontrada")
-        return {"message": error_msg}, 404
+        return erro_cotacao, 404
