@@ -87,7 +87,7 @@ class CotacaoBuscaSchema(BaseModel):
         ser informado.
     """
     simbolo: str = "PETR4"
-    token: str = "token1234567890"
+    """token: str = "token1234567890"""
 
 
 class CotacaoViewSchema(BaseModel):

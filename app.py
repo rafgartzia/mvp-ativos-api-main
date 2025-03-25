@@ -8,6 +8,7 @@ from schemas import *
 from flask_cors import CORS
 from datetime import datetime
 import requests
+import os
 
 
 info = Info(title="API Ativos", version="1.0.0")
@@ -152,7 +153,7 @@ def cotacao(query: CotacaoBuscaSchema):
     """Retorna a cotação de um ativo.
     """
     simbolo = query.simbolo
-    token = query.token
+    token = os.environ['TOKEN']
 
     logger.debug(f"Buscando cotação do ativo {ativo}")
     cotacao, status = get_cotacao(simbolo, token)
@@ -167,7 +168,7 @@ def update_ativo(query: CotacaoBuscaSchema):
     Atualiza a cotação de um ativo.
     """
     ativo = query.simbolo
-    token = query.token
+    token = os.environ['TOKEN']
 
     cotacao, status = get_cotacao(ativo, token)
 
