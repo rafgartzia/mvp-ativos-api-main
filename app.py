@@ -39,7 +39,7 @@ def add_ativo(form: AtivoSchema):
     Retorna um representação das ativos
     """
     ativo = Ativo(
-        simbolo=form.simbolo,
+        simbolo=form.simbolo.upper(),
         nome=form.nome,
         preco_medio=form.preco_medio,
         quantidade=form.quantidade
@@ -99,7 +99,7 @@ def get_ativo(query: AtivoBuscaSchema):
 
     Retorna um representação das ativos.
     """
-    ativo_simbolo = query.simbolo
+    ativo_simbolo = query.simbolo.upper()
     logger.debug(f"Coletando dados sobre a ativo #{ativo_simbolo}")
     # criando conexão com a base
     session = Session()
@@ -125,7 +125,7 @@ def del_ativo(query: AtivoBuscaSchema):
 
     Retorna um mensagem de confirmação da remoção.
     """
-    ativo_simbolo = query.simbolo
+    ativo_simbolo = query.simbolo.upper()
     print(ativo_simbolo)
     logger.debug(f"Deletando dados sobre ativo #{ativo_simbolo}")
     # criando conexão com a base
@@ -152,7 +152,7 @@ def del_ativo(query: AtivoBuscaSchema):
 def cotacao(query: CotacaoBuscaSchema):
     """Retorna a cotação de um ativo.
     """
-    simbolo = query.simbolo
+    simbolo = query.simbolo.upper()
     token = os.environ['TOKEN']
 
     logger.debug(f"Buscando cotação do ativo {ativo}")
@@ -167,7 +167,7 @@ def update_ativo(query: CotacaoBuscaSchema):
     """
     Atualiza a cotação de um ativo.
     """
-    ativo = query.simbolo
+    ativo = query.simbolo.upper()
     token = os.environ['TOKEN']
 
     cotacao, status = get_cotacao(ativo, token)
