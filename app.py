@@ -10,10 +10,12 @@ from datetime import datetime
 import requests
 import os
 
+print(os.environ['TOKEN'])
 
 info = Info(title="API Ativos", version="1.0.0")
 app = OpenAPI(__name__, info=info)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}},
+     methods=["GET", "POST", "PATCH", "DELETE"])
 
 # definindo tags
 home_tag = Tag(name="Documentação",
@@ -24,14 +26,14 @@ cotacao_tag = Tag(name="Cotação",
                   description="Busca a última cotação de um ativo")
 
 
-@app.get('/', tags=[home_tag])
+@app.get('/', tags=[home_tag], methods=['GET'])
 def home():
     """Redireciona para /openapi, swagger.
     """
     return redirect('/openapi')
 
 
-@app.post('/ativo', tags=[ativo_tag],
+@app.post('/ativo', tags=[ativo_tag], methods=['POST'],
           responses={"200": AtivoViewSchema, "409": ErrorSchema, "400": ErrorSchema})
 def add_ativo(form: AtivoSchema):
     """Adiciona um novo ativo à base de dados
@@ -70,7 +72,7 @@ def add_ativo(form: AtivoSchema):
         return {"message": error_msg}, 400
 
 
-@app.get('/ativos', tags=[ativo_tag],
+@app.get('/ativos', tags=[ativo_tag], methods=['GET'],
          responses={"200": ListagemAtivosSchema, "404": ErrorSchema})
 def get_ativos():
     """
@@ -92,7 +94,7 @@ def get_ativos():
         return apresenta_ativos(ativos), 200
 
 
-@app.get('/ativo', tags=[ativo_tag],
+@app.get('/ativo', tags=[ativo_tag], methods=['GET'],
          responses={"200": AtivoViewSchema, "404": ErrorSchema})
 def get_ativo(query: AtivoBuscaSchema):
     """Faz a busca por um ativo.
@@ -118,7 +120,7 @@ def get_ativo(query: AtivoBuscaSchema):
         return apresenta_ativo(ativo), 200
 
 
-@app.delete('/ativo', tags=[ativo_tag],
+@app.delete('/ativo', tags=[ativo_tag], methods=['DELETE'],
             responses={"200": AtivoDelSchema, "404": ErrorSchema})
 def del_ativo(query: AtivoBuscaSchema):
     """Deleta um Ativo a partir do descrição da ativo informada.
@@ -147,7 +149,7 @@ def del_ativo(query: AtivoBuscaSchema):
         return {"mesage": error_msg}, 404
 
 
-@app.get('/cotacao', tags=[cotacao_tag],
+@app.get('/cotacao', tags=[cotacao_tag], methods=['GET'],
          responses={"200": CotacaoViewSchema, "404": ErrorSchema})
 def cotacao(query: CotacaoBuscaSchema):
     """Retorna a cotação de um ativo.
@@ -161,7 +163,7 @@ def cotacao(query: CotacaoBuscaSchema):
     return cotacao, status
 
 
-@app.patch('/atualizacotacao', tags=[cotacao_tag],
+@app.patch('/atualizacotacao', tags=[cotacao_tag], methods=['PATCH'],
            responses={"200": AtivoViewSchema, "404": ErrorSchema})
 def update_ativo(query: CotacaoBuscaSchema):
     """
