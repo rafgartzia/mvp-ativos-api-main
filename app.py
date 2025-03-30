@@ -15,7 +15,7 @@ print(os.environ['TOKEN'])
 info = Info(title="API Ativos", version="1.0.0")
 app = OpenAPI(__name__, info=info)
 CORS(app, resources={r"/*": {"origins": "*"}},
-     methods=["GET", "POST", "PATCH", "DELETE"])
+     methods=["GET", "POST", "PATCH", "DELETE", "PUT"])
 
 # definindo tags
 home_tag = Tag(name="Documentação",
@@ -163,8 +163,8 @@ def cotacao(query: CotacaoBuscaSchema):
     return cotacao, status
 
 
-@app.patch('/atualizacotacao', tags=[cotacao_tag], methods=['PATCH'],
-           responses={"200": AtivoViewSchema, "404": ErrorSchema})
+@app.put('/atualizacotacao', tags=[cotacao_tag], methods=['PUT'],
+         responses={"200": AtivoViewSchema, "404": ErrorSchema})
 def update_ativo(query: CotacaoBuscaSchema):
     """
     Atualiza a cotação de um ativo.
