@@ -8,8 +8,8 @@ class AtivoSchema(BaseModel):
     """
     simbolo: str = "PETR4"
     nome: str = "Petrobras PN"
-    preco_medio: float = 50.00
     quantidade: int = 100
+    preco_medio: float = 50.00
     """cotacao: float = 55.00
     valor_total: float = 5500.00
     data_cotacao: str = "2025-01-01 00:00:00.000"
@@ -38,8 +38,8 @@ def apresenta_ativos(ativos: List[AtivoSchema]):
         result.append({
             "simbolo": ativo.simbolo,
             "nome": ativo.nome,
-            "preco_medio": ativo.preco_medio,
             "quantidade": ativo.quantidade,
+            "preco_medio": ativo.preco_medio,
             "cotacao": ativo.cotacao,
             "data_cotacao": ativo.data_cotacao
         })
@@ -52,8 +52,8 @@ class AtivoViewSchema(BaseModel):
     """
     simbolo: str = "PETR4"
     nome: str = "Petrobras PN"
-    preco_medio: float = 50.00
     quantidade: int = 100
+    preco_medio: float = 50.00
     cotacao: float = 55.00
     data_cotacao: str = "2025-01-01 00:00:00.000"
 
@@ -73,8 +73,8 @@ def apresenta_ativo(ativo: Ativo):
     return {
         "simbolo": ativo.simbolo,
         "nome": ativo.nome,
-        "preco_medio": ativo.preco_medio,
         "quantidade": ativo.quantidade,
+        "preco_medio": ativo.preco_medio,
         "cotacao": ativo.cotacao,
         "data_cotacao": ativo.data_cotacao
 

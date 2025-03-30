@@ -43,8 +43,9 @@ def add_ativo(form: AtivoSchema):
     ativo = Ativo(
         simbolo=form.simbolo.upper(),
         nome=form.nome,
-        preco_medio=form.preco_medio,
-        quantidade=form.quantidade
+        quantidade=form.quantidade,
+        preco_medio=form.preco_medio
+
     )
     logger.debug(f"Adicionando ativo: {ativo.simbolo} - {ativo.nome}")
     try:
