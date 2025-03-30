@@ -15,7 +15,7 @@ COPY . .
 
 # Define a variável de ambiente TOKEN
 
-ENV TOKEN=aaaaaaaaaaaaaaaaaa
+ENV TOKEN=msUTecNcZmNGMqGYXAs8vS
 
 # Define o comando de execução da API
 CMD ["flask", "run", "--host", "0.0.0.0", "--port", "5000"]
