@@ -83,11 +83,9 @@ def apresenta_ativo(ativo: Ativo):
 
 class CotacaoBuscaSchema(BaseModel):
     """ Define como deve ser a estrutura que representa a busca. Que será
-        feita apenas com base no codigo do ativo. O token da API externa deve
-        ser informado.
+        feita apenas com base no codigo do ativo.
     """
     simbolo: str = "PETR4"
-    """token: str = "token1234567890"""
 
 
 class CotacaoViewSchema(BaseModel):
