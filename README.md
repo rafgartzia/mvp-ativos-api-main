@@ -23,7 +23,6 @@ Além dessas informações os ativos ainda podem conter as seguinte informaçõe
 
 O mvp foi estruturado conforme o diagrama:
 
-![Diagrama de arquitetura](mpv.png)
 
 ```mermaid
 architecture-beta
