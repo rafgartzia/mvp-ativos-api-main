@@ -49,6 +49,7 @@ architecture-beta
 Para esse mvp utilizamos o endpoint "quote", passando com informação o código do ativo e o período de 1 dia, para que seja retornada o último preço de fechamento disponível.
 
 ```
+   Metodo GET
    https://brapi.dev/api/quote/simbolo?range=1d&token=token
 ```
 ```
